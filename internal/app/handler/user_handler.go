@@ -2,14 +2,13 @@ package handler
 
 import (
 	"ejaw_test_case/internal/domain"
-	"ejaw_test_case/pkg/jwt"
 	"encoding/json"
 	"net/http"
 )
 
 type UserService interface {
 	CreateUser(username, password, role string) error
-	AuthenticateUser(username, password string) (*domain.User, error)
+	AuthenticateUser(username, password string) (*domain.User, string, error)
 }
 
 type UserHandler struct {
@@ -49,15 +48,9 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.userService.AuthenticateUser(credentials.Username, credentials.Password)
+	user, token, err := h.userService.AuthenticateUser(credentials.Username, credentials.Password)
 	if err != nil {
-		http.Error(w, "authentication failed", http.StatusUnauthorized)
-		return
-	}
-
-	token, err := jwt.GenerateToken(user.ID, user.Role)
-	if err != nil {
-		http.Error(w, "failed to generate token", http.StatusInternalServerError)
+		http.Error(w, "authentication failed: "+err.Error(), http.StatusUnauthorized)
 		return
 	}
 

@@ -14,11 +14,14 @@ type DBConfig struct {
 	SSLMode  string
 }
 
+var (
+	cfg  *DBConfig
+	once sync.Once
+)
+
 func GetDB() *DBConfig {
-	var cfg DBConfig
-	var once sync.Once
 	once.Do(func() {
-		cfg = DBConfig{
+		cfg = &DBConfig{
 			Host:     os.Getenv("DB_HOST"),
 			Port:     os.Getenv("DB_PORT"),
 			User:     os.Getenv("DB_USERNAME"),
@@ -27,5 +30,5 @@ func GetDB() *DBConfig {
 			SSLMode:  os.Getenv("DB_SSL_MODE"),
 		}
 	})
-	return &cfg
+	return cfg
 }

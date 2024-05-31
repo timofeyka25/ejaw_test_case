@@ -6,7 +6,7 @@ import (
 	"ejaw_test_case/internal/service"
 	"ejaw_test_case/pkg/config"
 	"ejaw_test_case/pkg/database"
-	"ejaw_test_case/pkg/utils"
+	"ejaw_test_case/pkg/server"
 	_ "github.com/joho/godotenv/autoload"
 	"log"
 )
@@ -36,5 +36,5 @@ func main() {
 
 	routes := handler.InitRoutes(userHandler, productHandler, sellerHandler)
 
-	utils.StartServerWithGracefulShutdown(routes, config.Get().ServerURL)
+	server.StartServerWithGracefulShutdown(routes, config.Get().ServerURL)
 }

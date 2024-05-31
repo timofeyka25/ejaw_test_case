@@ -3,7 +3,7 @@ package database
 import (
 	"database/sql"
 	"ejaw_test_case/pkg/config"
-	"ejaw_test_case/pkg/utils"
+	"ejaw_test_case/pkg/hash"
 	"fmt"
 )
 
@@ -31,7 +31,7 @@ func InitDB(db *sql.DB) error {
 	role := "admin"
 
 	if userCount == 0 {
-		password, err = utils.HashPassword(password)
+		password, err = hash.HashPassword(password)
 		if err != nil {
 			return fmt.Errorf("error hashing password: %v", err)
 		}

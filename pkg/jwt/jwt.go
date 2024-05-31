@@ -1,4 +1,4 @@
-package utils
+package jwt
 
 import (
 	"ejaw_test_case/pkg/config"

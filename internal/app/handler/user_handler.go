@@ -2,7 +2,7 @@ package handler
 
 import (
 	"ejaw_test_case/internal/domain"
-	"ejaw_test_case/pkg/utils"
+	"ejaw_test_case/pkg/jwt"
 	"encoding/json"
 	"net/http"
 )
@@ -55,7 +55,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID, user.Role)
+	token, err := jwt.GenerateToken(user.ID, user.Role)
 	if err != nil {
 		http.Error(w, "failed to generate token", http.StatusInternalServerError)
 		return

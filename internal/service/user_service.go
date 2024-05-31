@@ -2,7 +2,7 @@ package service
 
 import (
 	"ejaw_test_case/internal/domain"
-	"ejaw_test_case/pkg/utils"
+	"ejaw_test_case/pkg/hash"
 	"fmt"
 )
 
@@ -21,7 +21,7 @@ func NewUserService(repo UserRepository) *UserService {
 }
 
 func (s *UserService) CreateUser(username, password, role string) error {
-	hashedPassword, err := utils.HashPassword(password)
+	hashedPassword, err := hash.HashPassword(password)
 	if err != nil {
 		return fmt.Errorf("error hashing password: %v", err)
 	}
@@ -50,7 +50,7 @@ func (s *UserService) AuthenticateUser(username, password string) (*domain.User,
 		return nil, fmt.Errorf("user not found")
 	}
 
-	if !utils.CheckPasswordHash(password, user.Password) {
+	if !hash.CheckPasswordHash(password, user.Password) {
 		return nil, fmt.Errorf("incorrect password")
 	}
 

@@ -24,14 +24,17 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	productRepo := repository.NewProductRepository(db)
+	sellerRepo := repository.NewSellerRepository(db)
 
 	userService := service.NewUserService(userRepo)
 	productService := service.NewProductService(productRepo)
+	sellerService := service.NewSellerService(sellerRepo)
 
 	userHandler := handler.NewUserHandler(userService)
 	productHandler := handler.NewProductHandler(productService)
+	sellerHandler := handler.NewSellerHandler(sellerService)
 
-	routes := handler.InitRoutes(userHandler, productHandler)
+	routes := handler.InitRoutes(userHandler, productHandler, sellerHandler)
 
 	utils.StartServerWithGracefulShutdown(routes, config.Get().ServerURL)
 }

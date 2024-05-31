@@ -11,11 +11,23 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-#    networks:
-#      - net
+    networks:
+      - net
+
+  app:
+    build: ./
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    depends_on:
+      - db
+    networks:
+      - net
 
 volumes:
   postgres_data:
 
-#networks:
-#  net:
+networks:
+  net:
+    driver: bridge
+    external: false

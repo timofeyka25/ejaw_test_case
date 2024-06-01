@@ -59,6 +59,7 @@ func (h *UserHandler) SignIn(w http.ResponseWriter, r *http.Request) {
 		"token": token,
 	}
 	w.WriteHeader(http.StatusOK)
+
 	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

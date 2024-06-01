@@ -30,7 +30,7 @@ func (r *ProductRepository) GetProduct(id int) (*domain.Product, error) {
 	err := r.db.QueryRow(query, id).Scan(&product.ID, &product.Name, &product.Description, &product.Price, &product.SellerID)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return nil, fmt.Errorf("product not found")
 		}
 		return nil, fmt.Errorf("error getting product: %w", err)
 	}

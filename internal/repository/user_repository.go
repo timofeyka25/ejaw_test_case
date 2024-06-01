@@ -30,7 +30,7 @@ func (r *UserRepository) GetUser(id int) (*domain.User, error) {
 	err := r.db.QueryRow(query, id).Scan(&user.ID, &user.Username, &user.Password, &user.Role)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return nil, fmt.Errorf("user not found")
 		}
 		return nil, fmt.Errorf("error getting user: %w", err)
 	}

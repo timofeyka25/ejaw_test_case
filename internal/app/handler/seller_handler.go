@@ -27,8 +27,14 @@ func NewSellerHandler(sellerService SellerService) *SellerHandler {
 	}
 }
 
+type sellerDTO struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Phone string `json:"phone"`
+}
+
 func (h *SellerHandler) AddSeller(w http.ResponseWriter, r *http.Request) {
-	var seller domain.Seller
+	var seller sellerDTO
 	if err := json.NewDecoder(r.Body).Decode(&seller); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
@@ -41,11 +47,14 @@ func (h *SellerHandler) AddSeller(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(createdSeller)
+	if err = json.NewEncoder(w).Encode(sellerToSellerDTO(createdSeller)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *SellerHandler) GetSeller(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
+	idStr := r.PathValue("id")
 	if idStr == "" {
 		http.Error(w, "missing id parameter", http.StatusBadRequest)
 		return
@@ -59,19 +68,18 @@ func (h *SellerHandler) GetSeller(w http.ResponseWriter, r *http.Request) {
 
 	seller, err := h.sellerService.GetSeller(id)
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(sellerToSellerDTO(seller)); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if seller == nil {
-		http.Error(w, "seller not found", http.StatusNotFound)
-		return
-	}
-
-	json.NewEncoder(w).Encode(seller)
 }
 
 func (h *SellerHandler) UpdateSeller(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
+	idStr := r.PathValue("id")
 	if idStr == "" {
 		http.Error(w, "missing id parameter", http.StatusBadRequest)
 		return
@@ -98,11 +106,14 @@ func (h *SellerHandler) UpdateSeller(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(updatedSeller)
+	if err = json.NewEncoder(w).Encode(sellerToSellerDTO(updatedSeller)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *SellerHandler) DeleteSeller(w http.ResponseWriter, r *http.Request) {
-	idStr := r.URL.Query().Get("id")
+	idStr := r.PathValue("id")
 	if idStr == "" {
 		http.Error(w, "missing id parameter", http.StatusBadRequest)
 		return
@@ -130,5 +141,8 @@ func (h *SellerHandler) GetAllSellers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(sellers)
+	if err = json.NewEncoder(w).Encode(sellersResponseDTO(sellers)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

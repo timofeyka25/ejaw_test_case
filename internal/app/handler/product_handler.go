@@ -26,8 +26,16 @@ func NewProductHandler(productService ProductService) *ProductHandler {
 	}
 }
 
+type productDTO struct {
+	ID          int     `json:"id"`
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	SellerID    int     `json:"seller_id"`
+}
+
 func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	var product domain.Product
+	var product productDTO
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
@@ -40,7 +48,10 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(createdProduct)
+	if err = json.NewEncoder(w).Encode(productToProductDTO(createdProduct)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
@@ -58,15 +69,14 @@ func (h *ProductHandler) GetProduct(w http.ResponseWriter, r *http.Request) {
 
 	product, err := h.productService.GetProduct(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if product == nil {
-		http.Error(w, "product not found", http.StatusNotFound)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
-	json.NewEncoder(w).Encode(product)
+	if err = json.NewEncoder(w).Encode(productToProductDTO(product)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +92,7 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var product domain.Product
+	var product productDTO
 	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
@@ -97,7 +107,11 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(updatedProduct)
+
+	if err = json.NewEncoder(w).Encode(productToProductDTO(updatedProduct)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
@@ -129,5 +143,8 @@ func (h *ProductHandler) GetAllProducts(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	json.NewEncoder(w).Encode(products)
+	if err = json.NewEncoder(w).Encode(productsResponseDTO(products)); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }

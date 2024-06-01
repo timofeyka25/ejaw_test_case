@@ -30,7 +30,7 @@ func (r *SellerRepository) GetSeller(id int) (*domain.Seller, error) {
 	err := r.db.QueryRow(query, id).Scan(&seller.ID, &seller.Name, &seller.Phone)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return nil, fmt.Errorf("seller not found")
 		}
 		return nil, fmt.Errorf("error getting seller: %w", err)
 	}

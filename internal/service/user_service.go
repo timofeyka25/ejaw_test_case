@@ -7,6 +7,8 @@ import (
 	"fmt"
 )
 
+//go:generate mockgen -destination=mocks/mock_userrepository.go -package=mocks . UserRepository
+
 type UserRepository interface {
 	AddUser(user domain.User) error
 	GetUser(id int) (*domain.User, error)

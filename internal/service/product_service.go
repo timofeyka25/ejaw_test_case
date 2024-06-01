@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+//go:generate mockgen -destination=mocks/mock_productrepository.go -package=mocks . ProductRepository
+
 type ProductRepository interface {
 	CreateProduct(product *domain.Product) error
 	GetProduct(id int) (*domain.Product, error)

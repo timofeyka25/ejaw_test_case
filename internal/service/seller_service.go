@@ -5,6 +5,8 @@ import (
 	"fmt"
 )
 
+//go:generate mockgen -destination=mocks/mock_sellerrepository.go -package=mocks . SellerRepository
+
 type SellerRepository interface {
 	AddSeller(seller domain.Seller) error
 	GetSeller(id int) (*domain.Seller, error)

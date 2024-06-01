@@ -7,6 +7,8 @@ import (
 	"fmt"
 )
 
+//go:generate mockgen -source=product_repository.go -destination=../service/mocks/mock_productrepository.go -package=mocks
+
 type ProductRepository struct {
 	db *sql.DB
 }

@@ -7,8 +7,9 @@ import (
 	"ejaw_test_case/pkg/config"
 	"ejaw_test_case/pkg/database"
 	"ejaw_test_case/pkg/server"
-	_ "github.com/joho/godotenv/autoload"
 	"log"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {

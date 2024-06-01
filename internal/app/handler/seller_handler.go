@@ -1,11 +1,10 @@
 package handler
 
 import (
+	"ejaw_test_case/internal/domain"
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"ejaw_test_case/internal/domain"
 )
 
 type SellerService interface {

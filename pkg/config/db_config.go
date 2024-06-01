@@ -15,8 +15,8 @@ type DBConfig struct {
 }
 
 var (
-	cfg  *DBConfig
-	once sync.Once
+	cfg  *DBConfig //nolint
+	once sync.Once //nolint
 )
 
 func GetDB() *DBConfig {

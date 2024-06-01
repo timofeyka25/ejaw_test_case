@@ -22,7 +22,7 @@ ejaw_test_case/
 ## Setup
 1. Clone the repository: 
 ```
-git clone https://github.com/your-repo/ejaw_test_case.git
+git clone https://github.com/timofeyka25/ejaw_test_case.git
 cd ejaw_test_case
 ```
 2. Copy the example environment variables file and update it with your settings:

@@ -3,8 +3,9 @@ package jwt
 import (
 	"ejaw_test_case/pkg/config"
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type Claims struct {
@@ -49,7 +50,6 @@ func ValidateToken(tokenString string) (*Claims, error) {
 		}
 		return getJWTSecret(), nil
 	})
-
 	if err != nil {
 		return nil, err
 	}

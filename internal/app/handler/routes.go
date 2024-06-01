@@ -8,7 +8,8 @@ import (
 func InitRoutes(
 	userHandler *UserHandler,
 	productHandler *ProductHandler,
-	sellerHandler *SellerHandler) *http.ServeMux {
+	sellerHandler *SellerHandler,
+) *http.ServeMux {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("POST /auth/signup", userHandler.SignUp)

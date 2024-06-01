@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"ejaw_test_case/pkg/jwt"
 	"log"
 	"net/http"
@@ -28,15 +27,11 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		claims, err := jwt.ValidateToken(parts[1])
+		_, err := jwt.ValidateToken(parts[1])
 		if err != nil {
 			http.Error(w, "invalid or expired token", http.StatusUnauthorized)
 			return
 		}
-
-		ctx := context.WithValue(r.Context(), "userID", claims.UserID)
-		ctx = context.WithValue(ctx, "role", claims.Role)
-		r = r.WithContext(ctx)
 
 		next.ServeHTTP(w, r)
 	})

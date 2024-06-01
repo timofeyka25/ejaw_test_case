@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"ejaw_test_case/pkg/config"
 	"fmt"
-	_ "github.com/lib/pq"
 	"log"
+
+	_ "github.com/lib/pq"
 )
 
 func NewConnection() (*sql.DB, error) {

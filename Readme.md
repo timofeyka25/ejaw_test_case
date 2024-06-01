@@ -10,6 +10,10 @@ ejaw_test_case/
 ├── internal/
 ├── pkg/
 ├── .dockerignore
+<<<<<<< HEAD
+=======
+├── .env
+>>>>>>> origin/master
 ├── .env.example
 ├── .gitignore
 ├── docker-compose.yaml
